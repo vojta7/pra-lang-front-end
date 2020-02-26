@@ -1,4 +1,4 @@
-use mylib::{execute, parse, ParsingError, RuntimeError};
+use mylib::{execute, parse, ParsingError, Program, RuntimeError};
 use serde::Serialize;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
@@ -8,6 +8,12 @@ struct ProgramResult {
     parsing_error: Option<ParsingError>,
     runtime_error: Option<RuntimeError>,
     return_value: Option<String>,
+}
+
+#[derive(Serialize)]
+struct ParsingResult {
+    parsing_error: Option<ParsingError>,
+    ast: Option<Program>,
 }
 
 #[wasm_bindgen]
@@ -29,6 +35,21 @@ pub fn run(input: &str) -> JsValue {
             parsing_error: Some(e),
             runtime_error: None,
             return_value: None,
+        },
+    })
+    .unwrap()
+}
+
+#[wasm_bindgen]
+pub fn parse_code(input: &str) -> JsValue {
+    JsValue::from_serde(&match parse(input) {
+        Ok(program) => ParsingResult {
+            parsing_error: None,
+            ast: Some(program),
+        },
+        Err(e) => ParsingResult {
+            parsing_error: Some(e),
+            ast: None,
         },
     })
     .unwrap()
