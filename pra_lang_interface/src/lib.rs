@@ -1,4 +1,4 @@
-use mylib::{execute, parse, ParsingError, Program, RuntimeError};
+use mylib::{execute, parse, Lexer, LexerError, ParsingError, Program, RuntimeError, Token};
 use serde::Serialize;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
@@ -53,4 +53,40 @@ pub fn parse_code(input: &str) -> JsValue {
         },
     })
     .unwrap()
+}
+
+#[derive(Serialize)]
+struct TokenOut {
+    from: usize,
+    to: usize,
+    simple_type: String,
+}
+
+fn token_to_simple_type(token: &Token) -> &'static str {
+    use Token::*;
+    match token {
+        LBrace | LParen | RBrace | RParen => "brace",
+        True | False => "boolean-value",
+        If | Else | Function => "keyword",
+        Ident(_) => "ident",
+        StringValue(_) => "string",
+        DecLiteral(_) => "dec-literal",
+        I32 | Boolean | String => "data-type",
+        _ => "symbol",
+    }
+}
+
+#[wasm_bindgen]
+pub fn simple_lex_code(input: &str) -> JsValue {
+    let lexer = Lexer::new(input);
+    let tokens: Vec<_> = lexer.collect::<Result<_, _>>().unwrap();
+    let tokens: Vec<_> = tokens
+        .iter()
+        .map(|(from, token, to)| TokenOut {
+            from: *from,
+            to: *to,
+            simple_type: token_to_simple_type(token).to_owned(),
+        })
+        .collect();
+    JsValue::from_serde(&tokens).unwrap()
 }
