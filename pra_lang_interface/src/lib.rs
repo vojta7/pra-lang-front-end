@@ -5,9 +5,15 @@ use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
 #[derive(Serialize)]
+struct ExternalRuntimeError {
+    position: usize,
+    description: String,
+}
+
+#[derive(Serialize)]
 struct ProgramResult {
     parsing_error: Option<ParsingError>,
-    runtime_error: Option<RuntimeError>,
+    runtime_error: Option<ExternalRuntimeError>,
     return_value: Option<String>,
     stdout: Option<String>,
 }
@@ -56,7 +62,10 @@ pub fn run(input: &str) -> JsValue {
                 },
                 Err(e) => ProgramResult {
                     parsing_error: None,
-                    runtime_error: Some(e),
+                    runtime_error: Some(ExternalRuntimeError {
+                        description: format!("{}", e.error_type),
+                        position: e.position,
+                    }),
                     return_value: None,
                     stdout: None,
                 },
@@ -112,7 +121,8 @@ fn token_to_simple_type(token: &Token) -> &'static str {
 /// returns {from,to,simple_type}[] skipping all invalid tokens
 pub fn simple_lex_code(input: &str) -> JsValue {
     let lexer = Lexer::new(input);
-    let tokens: Vec<_> = lexer.filter_map(|t| {if let Ok(v) = t {Some(v)} else {None}})
+    let tokens: Vec<_> = lexer
+        .filter_map(|t| if let Ok(v) = t { Some(v) } else { None })
         .map(|(from, token, to)| TokenOut {
             from,
             to,
