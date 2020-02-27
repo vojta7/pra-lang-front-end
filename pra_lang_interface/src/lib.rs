@@ -1,4 +1,5 @@
-use mylib::{execute, parse, Lexer, LexerError, ParsingError, Program, RuntimeError, Token};
+use mylib::ast::{ArgList, VarVal};
+use mylib::{execute, parse, Buildins, Lexer, ParsingError, Program, RuntimeError, Token};
 use serde::Serialize;
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
@@ -8,6 +9,7 @@ struct ProgramResult {
     parsing_error: Option<ParsingError>,
     runtime_error: Option<RuntimeError>,
     return_value: Option<String>,
+    stdout: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -16,25 +18,55 @@ struct ParsingResult {
     ast: Option<Program>,
 }
 
+fn buildins<'a>(output: &'a mut String) -> Buildins<'a> {
+    let mut f: Buildins = HashMap::new();
+    f.insert(
+        "print".to_owned(),
+        Box::from(move |args: ArgList| {
+            for arg in args.args {
+                match arg {
+                    VarVal::I32(Some(v)) => output.push_str(&format!("{}", v)),
+                    VarVal::BOOL(Some(v)) => output.push_str(&format!("{}", v)),
+                    VarVal::STRING(Some(v)) => output.push_str(&format!("{}", v)),
+                    VarVal::UNIT => output.push_str("()"),
+                    _ => (),
+                }
+            }
+            output.push_str("\n");
+            VarVal::UNIT
+        }),
+    );
+    f
+}
+
 #[wasm_bindgen]
 pub fn run(input: &str) -> JsValue {
+    let mut output = String::new();
+    let mut buildins = buildins(&mut output);
     JsValue::from_serde(&match parse(input) {
-        Ok(program) => match execute(&program, &mut HashMap::new()) {
-            Ok(v) => ProgramResult {
-                parsing_error: None,
-                runtime_error: None,
-                return_value: Some(format!("{}", v)),
-            },
-            Err(e) => ProgramResult {
-                parsing_error: None,
-                runtime_error: Some(e),
-                return_value: None,
-            },
-        },
+        Ok(program) => {
+            let program_result = execute(&program, &mut HashMap::new(), &mut buildins);
+            std::mem::forget(buildins);
+            match program_result {
+                Ok(v) => ProgramResult {
+                    parsing_error: None,
+                    runtime_error: None,
+                    return_value: Some(format!("{}", v)),
+                    stdout: Some(output),
+                },
+                Err(e) => ProgramResult {
+                    parsing_error: None,
+                    runtime_error: Some(e),
+                    return_value: None,
+                    stdout: None,
+                },
+            }
+        }
         Err(e) => ProgramResult {
             parsing_error: Some(e),
             runtime_error: None,
             return_value: None,
+            stdout: None,
         },
     })
     .unwrap()
