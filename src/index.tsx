@@ -44,8 +44,10 @@ function App(props: {wasm:Wasm}) {
     <div>
         <Editor
           value={code}
+          className="editor"
+          textareaId="codeArea"
           onValueChange={code => setCode(code)}
-          highlight={code => (<SRSCode code={code} lex={props.wasm.simple_lex_code} />)}
+          highlight={code => SRSCode(code, props.wasm.simple_lex_code)}
           padding={10}
           style={{
             fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -107,20 +109,21 @@ interface Token {
     simple_type: string
 }
 
-function SRSCode(props: {code: string, lex: (arg1: string) => any}) {
-    const tokens=props.lex(props.code) as Token[];
+function SRSCode(code: string, lex: (arg1: string) => any): string {
+    const tokens=lex(code) as Token[];
     let lastElement = 0;
-    let highlightedCode: React.ReactNode[] = [];
+    let highlightedCode = "";
     tokens.map(({from, to, simple_type})=>{
         if (from > lastElement) {
-            highlightedCode.push((<span>{props.code.substring(lastElement,from)}</span>));
+            highlightedCode += `<span>${code.substring(lastElement,from)}</span>`;
         }
         lastElement = to;
-        highlightedCode.push((<span className={simple_type}>{props.code.substring(from,to)}</span>))
+        highlightedCode += `<span class=${simple_type}>${code.substring(from,to)}</span>`
     });
-    return (
-        <div>{highlightedCode.map(el => el)}</div>
-    )
+    return highlightedCode
+        .split("\n")
+        .map((line, i) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
+        .join("\n")
 }
 
 async function run() {
