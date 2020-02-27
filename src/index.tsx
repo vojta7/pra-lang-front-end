@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {useState} from 'react';
 import Editor from 'react-simple-code-editor';
 
-const exmaple_code = `// print fizz buzz for given number
+const example_code = `// print fizz buzz for given number
 fn print_fizzbuzz(n: i32) {
     mod3 = n % 3 == 0;
     mod5 = n % 5 == 0;
@@ -35,8 +35,10 @@ fn main() {
 }
 `;
 
-function App(props: {wasm:any}) {
-  const [code, setCode] = useState(exmaple_code);
+type Wasm = typeof import("../pra_lang_interface/pkg/pra_lang_interface")
+
+function App(props: {wasm:Wasm}) {
+  const [code, setCode] = useState(example_code);
 
   return (
     <div>
@@ -64,18 +66,39 @@ function App(props: {wasm:any}) {
 
 function CodeOutput(props: {code: string, run: (arg1: string) => any}) {
     const output = props.run(props.code);
-    console.log(output)
+    console.log(output);
     if (output.code !== null) {
-        return (<pre>{output.stdout}</pre>)
+        return (<pre className="console">{output.stdout}</pre>)
     } else {
-        return (<pre></pre>)
+        return (<pre className="console"></pre>)
     }
 }
 
+interface ParsingError {
+    from: number,
+    to: number,
+    description: string
+}
+interface ParseOutput {
+    parsing_error?: ParsingError,
+    ast?: {}
+}
+
+function linePosition(input: string, pos: number): [number,number] {
+    let slice = input.substr(0,pos)
+    let lines = slice.split("\n")
+    return [lines.length,lines[lines.length -1].length]
+}
+
 function ParseOutput(props: {code: string, parse: (arg1: string) => any}) {
-    const output = props.parse(props.code);
-    console.log(output)
-    return (<div></div>)
+    const output = props.parse(props.code) as ParseOutput;
+    console.log(output?.ast);
+    if (output.parsing_error !== null) {
+        let [line, position] = linePosition(props.code, output.parsing_error ? output.parsing_error.from : 0)
+        return (<div className="errors">Error line {line} pos {position}:<br/>>{output.parsing_error?.description}</div>)
+    } else {
+        return (<div className="errors"></div>)
+    }
 }
 
 interface Token {
@@ -94,7 +117,7 @@ function SRSCode(props: {code: string, lex: (arg1: string) => any}) {
         }
         lastElement = to;
         highlightedCode.push((<span className={simple_type}>{props.code.substring(from,to)}</span>))
-    })
+    });
     return (
         <div>{highlightedCode.map(el => el)}</div>
     )
@@ -107,5 +130,5 @@ async function run() {
     ReactDOM.render(<App wasm={wasm}/>, document.getElementById("root"));
 }
 
-run()
+run();
 
