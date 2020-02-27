@@ -39,17 +39,43 @@ function App(props: {wasm:any}) {
   const [code, setCode] = useState(exmaple_code);
 
   return (
-    <Editor
-      value={code}
-      onValueChange={code => setCode(code)}
-      highlight={code => (<SRSCode code={code} lex={props.wasm.simple_lex_code} />)}
-      padding={10}
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-      }}
-    />
+    <div>
+        <Editor
+          value={code}
+          onValueChange={code => setCode(code)}
+          highlight={code => (<SRSCode code={code} lex={props.wasm.simple_lex_code} />)}
+          padding={10}
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12,
+          }}
+        />
+        <CodeOutput
+            code={code}
+            run={props.wasm.run}
+        />
+        <ParseOutput
+            code={code}
+            parse={props.wasm.parse_code}
+        />
+    </div>
   );
+}
+
+function CodeOutput(props: {code: string, run: (arg1: string) => any}) {
+    const output = props.run(props.code);
+    console.log(output)
+    if (output.code !== null) {
+        return (<pre>{output.stdout}</pre>)
+    } else {
+        return (<pre></pre>)
+    }
+}
+
+function ParseOutput(props: {code: string, parse: (arg1: string) => any}) {
+    const output = props.parse(props.code);
+    console.log(output)
+    return (<div></div>)
 }
 
 interface Token {
