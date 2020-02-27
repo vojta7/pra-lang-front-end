@@ -66,11 +66,26 @@ function App(props: {wasm:Wasm}) {
   );
 }
 
+interface RuntimeError {
+    description: string,
+    position: number
+}
+interface CodeOutput {
+    parsing_error?: ParsingError,
+    runtime_error?: RuntimeError,
+    return_value?: string,
+    stdout?: string
+}
+
 function CodeOutput(props: {code: string, run: (arg1: string) => any}) {
-    const output = props.run(props.code);
+    const output = props.run(props.code) as CodeOutput;
     console.log(output);
-    if (output.code !== null) {
+    if (output.stdout !== null) {
         return (<pre className="console">{output.stdout}</pre>)
+    } else if (output.parsing_error != null) {
+        return (<ParsingError code={props.code} error={output.parsing_error}/>)
+    } else if (output.runtime_error != null) {
+        return (<RuntimeError code={props.code} error={output.runtime_error}/>)
     } else {
         return (<pre className="console"></pre>)
     }
@@ -87,17 +102,26 @@ interface ParseOutput {
 }
 
 function linePosition(input: string, pos: number): [number,number] {
-    let slice = input.substr(0,pos)
-    let lines = slice.split("\n")
+    let slice = input.substr(0,pos);
+    let lines = slice.split("\n");
     return [lines.length,lines[lines.length -1].length]
+}
+
+function ParsingError(props: {code: string,error: ParsingError}) {
+    let [line, position] = linePosition(props.code, props.error.from);
+    return (<div className="errors">Error line {line} pos {position}:<br/>>{props.error.description}</div>)
+}
+
+function RuntimeError(props: {code: string,error: RuntimeError}) {
+    let [line, position] = linePosition(props.code, props.error.position);
+    return (<div className="errors">Error line {line} pos {position}:<br/>>{props.error.description}</div>)
 }
 
 function ParseOutput(props: {code: string, parse: (arg1: string) => any}) {
     const output = props.parse(props.code) as ParseOutput;
     console.log(output?.ast);
-    if (output.parsing_error !== null) {
-        let [line, position] = linePosition(props.code, output.parsing_error ? output.parsing_error.from : 0)
-        return (<div className="errors">Error line {line} pos {position}:<br/>>{output.parsing_error?.description}</div>)
+    if (output.parsing_error != null) {
+        return (<ParsingError code={props.code} error={output.parsing_error}/>)
     } else {
         return (<div className="errors"></div>)
     }
