@@ -18,7 +18,7 @@ struct ParsingResult {
     ast: Option<Program>,
 }
 
-fn buildins<'a>(output: &'a mut String) -> Buildins<'a> {
+fn builtins(output: &mut String) -> Buildins {
     let mut f: Buildins = HashMap::new();
     f.insert(
         "print".to_owned(),
@@ -42,11 +42,11 @@ fn buildins<'a>(output: &'a mut String) -> Buildins<'a> {
 #[wasm_bindgen]
 pub fn run(input: &str) -> JsValue {
     let mut output = String::new();
-    let mut buildins = buildins(&mut output);
+    let mut builtins = builtins(&mut output);
     JsValue::from_serde(&match parse(input) {
         Ok(program) => {
-            let program_result = execute(&program, &mut HashMap::new(), &mut buildins);
-            std::mem::forget(buildins);
+            let program_result = execute(&program, &mut HashMap::new(), &mut builtins);
+            std::mem::forget(builtins);
             match program_result {
                 Ok(v) => ProgramResult {
                     parsing_error: None,
@@ -109,15 +109,14 @@ fn token_to_simple_type(token: &Token) -> &'static str {
 }
 
 #[wasm_bindgen]
+/// returns {from,to,simple_type}[] skipping all invalid tokens
 pub fn simple_lex_code(input: &str) -> JsValue {
     let lexer = Lexer::new(input);
-    let tokens: Vec<_> = lexer.collect::<Result<_, _>>().unwrap();
-    let tokens: Vec<_> = tokens
-        .iter()
+    let tokens: Vec<_> = lexer.filter_map(|t| {if let Ok(v) = t {Some(v)} else {None}})
         .map(|(from, token, to)| TokenOut {
-            from: *from,
-            to: *to,
-            simple_type: token_to_simple_type(token).to_owned(),
+            from,
+            to,
+            simple_type: token_to_simple_type(&token).to_owned(),
         })
         .collect();
     JsValue::from_serde(&tokens).unwrap()
