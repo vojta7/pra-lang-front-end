@@ -4,11 +4,6 @@ body {
     background-color: #e6eed6;
 }
 
-body::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
-}
-
 h1,h2,h3,h4,pre {
     margin: 0;
     padding: 0;
