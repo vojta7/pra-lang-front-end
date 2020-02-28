@@ -18,12 +18,18 @@ function App(props: {wasm:Wasm}) {
   const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const updateCode = (code: string) => {
-      setCode(code);
-      const output = props.wasm.run(code) as ICodeOutput;
-      setCodeOutput(output);
-      setCodeTokens(props.wasm.simple_lex_code(code) as IToken[]);
-      setLinesToHighlight(linesWithErrors(code, output))
+  const updateCode = (newCode: string) => {
+      try {
+          const output = props.wasm.run(newCode) as ICodeOutput;
+          setCodeOutput(output);
+          setCodeTokens(props.wasm.simple_lex_code(newCode) as IToken[]);
+          setLinesToHighlight(linesWithErrors(newCode, output));
+          setCode(newCode);
+      } catch (e) {
+          console.error(`unexpected error ${e}`);
+          alert("Unexpected error, reloading page.");
+          window.location.reload()
+      }
   };
 
   return (
