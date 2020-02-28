@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Editor from 'react-simple-code-editor';
 import Console from './components/console/Console'
 import Grid from './components/grid'
@@ -9,6 +9,7 @@ import {linesWithErrors, code_highlight} from "./common";
 import Tabbed from "./components/tabbed";
 import Examples, {fizzBuzzCode} from "./components/examples";
 import Grammar from "./components/grammar";
+import Resizable from "./components/resizable";
 
 function App(props: {wasm:Wasm}) {
   const [code, setCode] = useState(fizzBuzzCode);
@@ -44,10 +45,10 @@ function App(props: {wasm:Wasm}) {
             </Grid>
         </Grid>
         <Grid container className="content">
-            <Grid item size={3} className="scrollable">
+            <Resizable>
                 <Editor
                     value={code}
-                    className="editor"
+                    className="editor scrollable"
                     textareaId="codeArea"
                     onValueChange={updateCode}
                     highlight={code => code_highlight(code, codeTokens, linesToHighlight)}
@@ -57,9 +58,7 @@ function App(props: {wasm:Wasm}) {
                         fontSize: 12,
                     }}
                 />
-            </Grid>
-            <Grid item size={3} className="max-height">
-                <Tabbed className="max-height" selected={selectedTab}>
+                <Tabbed className="max-height right-panel" selected={selectedTab}>
                     <Console
                         code={code}
                         output={codeOutput}
@@ -67,7 +66,7 @@ function App(props: {wasm:Wasm}) {
                     <Grammar/>
                     <h1>About</h1>
                 </Tabbed>
-            </Grid>
+            </Resizable>
         </Grid>
         <Examples className="bottom-bar" setCode={updateCode}/>
     </Grid>
