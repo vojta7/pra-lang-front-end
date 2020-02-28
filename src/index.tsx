@@ -6,42 +6,11 @@ import Console from './components/console/Console'
 import Grid from './components/grid'
 import {IToken, ICodeOutput, Wasm} from "./rust_types";
 import {linesWithErrors, code_highlight} from "./common";
-
-// TODO move to separate file
-const example_code = `// print fizz buzz for given number
-fn print_fizzbuzz(n: i32) {
-    mod3 = n % 3 == 0;
-    mod5 = n % 5 == 0;
-    if mod3 && mod5 {
-        print("Fizz Buzz")
-    } else {
-        if mod3 {
-            print("Fizz")
-        } else {
-            if mod5 {
-                print("Buzz")
-            } else {
-                print(n)
-            }
-        }
-    }
-}
-
-// print fizz buzz from current to stop
-fn fizzbuzz(current: i32, stop: i32) {
-    if current <= stop {
-        print_fizzbuzz(current);
-        fizzbuzz(current+1, stop)
-    }
-}
-
-fn main() {
-    fizzbuzz(1, 100)
-}
-`;
+import Tabbed from "./components/tabbed";
+import Examples, {fizzBuzzCode} from "./components/examples";
 
 function App(props: {wasm:Wasm}) {
-  const [code, setCode] = useState(example_code);
+  const [code, setCode] = useState(fizzBuzzCode);
   const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as ICodeOutput);
   const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as IToken[]);
   const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);
@@ -72,10 +41,14 @@ function App(props: {wasm:Wasm}) {
                 />
             </Grid>
             <Grid item size={3}>
-                <Console
-                    code={code}
-                    output={codeOutput}
-                />
+                <Tabbed className="full-view" tabNames={["Output", "Grammar", "Examples"]}>
+                    <Console
+                        code={code}
+                        output={codeOutput}
+                    />
+                    <h2>Grammar</h2>
+                    <Examples setCode={updateCode}/>
+                </Tabbed>
             </Grid>
         </Grid>
     </div>

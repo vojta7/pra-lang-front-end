@@ -1,5 +1,5 @@
 import React from 'react';
-import {ICodeOutput, IParsingError, IRuntimeError} from '../../rust_types'
+import {ICodeOutput} from '../../rust_types'
 import ParsingError from './ParsingError'
 import RuntimeError from "./RuntimeError";
 

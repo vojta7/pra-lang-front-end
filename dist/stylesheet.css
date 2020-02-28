@@ -31,8 +31,16 @@ body {
     background-color: black;
     color: white;
     padding: 0 10px 0 10px;
-    height: 100vh;
     overflow: scroll;
+    height: 100%;
+}
+
+.tab-bar {
+    max-height: 10%;
+}
+
+.tab {
+    height: 90%;
 }
 
 .code-output {
@@ -51,6 +59,7 @@ body {
 }
 
 .full-view {
+    height: 100vh;
     max-height: 100vh;
 }
 
