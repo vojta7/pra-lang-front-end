@@ -22,16 +22,16 @@ export default function Resizable(props: {children: [ReactElement, ReactElement]
         border: "solid 1px #777879",
         margin: 0,
         padding: 0,
-        "box-sizing": "border-box",
-    }
+        "box-sizing": "border-box"
+    };
 
     const resize = (e: MouseEvent) => {
         setPosition(e.pageX)
-    }
+    };
 
     const stopResize = () => {
         window.removeEventListener('mousemove', resize)
-    }
+    };
 
     return (
         <div className="resizable">

@@ -8,7 +8,7 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
     }
     return (
         <Grid className={classNames} container>
-            <Grid item size={1}>
+            <Grid item size={2} className="centered">
                 <h4>Examples</h4>
             </Grid>
             <Grid item size={1}>

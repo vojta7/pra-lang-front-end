@@ -29,7 +29,7 @@ function App(props: {wasm:Wasm}) {
   return (
     <Grid className="root">
         <Grid container className="menu">
-            <Grid item size={3}>
+            <Grid item size={3} className="centered">
                 <h1>Editor</h1>
             </Grid>
             <Grid item size={3} container>

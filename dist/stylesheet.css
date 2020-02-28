@@ -9,6 +9,30 @@ body::-webkit-scrollbar-thumb {
     outline: 1px solid slategrey;
 }
 
+h1,h2,h3,h4,pre {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2em;
+    text-align: center;
+}
+
+button {
+    height: 100%;
+    border: none;
+    background-color: #dde2c6;
+    width: 75%;
+}
+
+button:hover {
+    background-color: #a72608;
+}
+
+/*
+Syntax highlighting
+ */
 .keyword {
     color: green
 }
@@ -40,22 +64,7 @@ body::-webkit-scrollbar-thumb {
     padding: 0 10px 0 10px;
 }
 
-h1 {
-    font-size: 2em;
-    margin: 0;
-    text-align: center;
-}
 
-button {
-    height: 100%;
-    border: none;
-    background-color: #dde2c6;
-    width: 75%;
-}
-
-button:hover {
-    background-color: #a72608;
-}
 
 .selected {
     border-bottom: inset #a72608 8px;
@@ -63,14 +72,11 @@ button:hover {
 
 .menu, .bottom-bar {
     background-color: #bbc5aa;
+    height: 10%;
 }
 
 .grammar {
     padding: 10px;
-}
-
-.examples {
-    height: 10%;
 }
 
 .tab {
@@ -88,10 +94,17 @@ button:hover {
     height: 100%;
 }
 
+.centered {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
 .grid-container {
     display: flex;
-    flex-wrap: wrap;
     width: 100%;
+    align-content: center;
+    justify-content: center;
 }
 
 .resizable {
@@ -106,10 +119,6 @@ button:hover {
 
 .max-height {
     height: 100%;
-}
-
-.menu {
-    height: 10%;
 }
 
 .content {
@@ -144,10 +153,9 @@ button:hover {
     width: 100%;
 }
 
-pre {
-    margin: 0;
-}
-
+/*
+Editor
+ */
 .editor {
     counter-reset: line;
     border: 1px solid #e6eed6;
