@@ -57,7 +57,7 @@ function App(props: {wasm:Wasm}) {
   return (
     <div>
         <Grid container className="full-view">
-            <Grid item size={3}>
+            <Grid item size={3} className="scrollable">
                 <Editor
                     value={code}
                     className="editor"

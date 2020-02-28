@@ -1,0 +1,114 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.keyword {
+    color: green
+}
+
+.ident {
+    color: blue
+}
+
+.symbol {
+    color: green
+}
+
+.data-type {
+    color: darkorange
+}
+
+.string {
+    color: blueviolet
+}
+
+.dec-literal {
+    color: rebeccapurple
+}
+
+.console {
+    background-color: black;
+    color: white;
+    padding: 0 10px 0 10px;
+    height: 100vh;
+    overflow: scroll;
+}
+
+.code-output {
+    padding: 10px;
+}
+
+.scrollable {
+    overflow: scroll;
+    max-height: 100vh;
+}
+
+.grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.full-view {
+    max-height: 100vh;
+}
+
+.grid-item {
+    width: 100%;
+}
+
+.grid-size1 {
+    width: 16%;
+}
+
+.grid-size2 {
+    width: 33%;
+}
+
+.grid-size3 {
+    width: 50%;
+}
+
+.grid-size4 {
+    width: 66%;
+}
+
+.grid-size4 {
+    width: 83%;
+}
+
+.grid-size4 {
+    width: 100%;
+}
+
+pre {
+    margin: 0;
+}
+
+.editor {
+    counter-reset: line;
+    border: 1px solid #ced4da;
+}
+
+.editor #codeArea {
+    outline: none;
+    padding-left: 60px !important;
+}
+
+.editor pre {
+    padding-left: 60px !important;
+}
+
+.editor .editorLineNumber {
+    position: absolute;
+    left: 0px;
+    color: #5f5f5f;
+    text-align: right;
+    width: 40px;
+    font-weight: 100;
+}
+
+.editor .error {
+    background-color: darkorange;
+}
