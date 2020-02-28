@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {useState} from 'react';
 import Editor from 'react-simple-code-editor';
-import {Console} from './components/console'
-import {Grid} from './components/grid'
+import Console from './components/console/Console'
+import Grid from './components/grid'
+import {IToken, ICodeOutput, Wasm} from "./rust_types";
+import {linesWithErrors, code_highlight} from "./common";
 
+// TODO move to separate file
 const example_code = `// print fizz buzz for given number
 fn print_fizzbuzz(n: i32) {
     mod3 = n % 3 == 0;
@@ -37,31 +40,17 @@ fn main() {
 }
 `;
 
-type Wasm = typeof import("../pra_lang_interface/pkg/pra_lang_interface")
-
-function linesWithErrors(code: string, output: CodeOutput): number[] {
-    if (output.parsing_error) {
-        let [line, ] = linePosition(code,output.parsing_error.from);
-        return [line]
-    } else if (output.runtime_error) {
-        let [line, ] = linePosition(code,output.runtime_error.position);
-        return [line]
-    } else {
-        return []
-    }
-}
-
 function App(props: {wasm:Wasm}) {
   const [code, setCode] = useState(example_code);
-  const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as CodeOutput);
-  const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as Token[]);
+  const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as ICodeOutput);
+  const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as IToken[]);
   const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);
 
   const updateCode = (code: string) => {
       setCode(code);
-      const output = props.wasm.run(code) as CodeOutput;
+      const output = props.wasm.run(code) as ICodeOutput;
       setCodeOutput(output);
-      setCodeTokens(props.wasm.simple_lex_code(code) as Token[]);
+      setCodeTokens(props.wasm.simple_lex_code(code) as IToken[]);
       setLinesToHighlight(linesWithErrors(code, output))
   };
 
@@ -74,7 +63,7 @@ function App(props: {wasm:Wasm}) {
                     className="editor"
                     textareaId="codeArea"
                     onValueChange={updateCode}
-                    highlight={code => SRSCode(code, codeTokens, linesToHighlight)}
+                    highlight={code => code_highlight(code, codeTokens, linesToHighlight)}
                     padding={10}
                     style={{
                         fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -91,57 +80,6 @@ function App(props: {wasm:Wasm}) {
         </Grid>
     </div>
   );
-}
-
-export interface RuntimeError {
-    description: string,
-    position: number
-}
-export interface CodeOutput {
-    parsing_error?: ParsingError,
-    runtime_error?: RuntimeError,
-    return_value?: string,
-    stdout?: string
-}
-
-export interface ParsingError {
-    from: number,
-    to: number,
-    description: string
-}
-
-export function linePosition(input: string, pos: number): [number,number] {
-    let slice = input.substr(0,pos);
-    let lines = slice.split("\n");
-    return [lines.length,lines[lines.length -1].length]
-}
-
-interface Token {
-    from: number,
-    to: number,
-    simple_type: string
-}
-
-function SRSCode(code: string, tokens: Token[], linesToHighlight: number[]): string {
-    let lastElement = 0;
-    let highlightedCode = "";
-    tokens.map(({from, to, simple_type})=>{
-        if (from > lastElement) {
-            highlightedCode += `<span>${code.substring(lastElement,from)}</span>`;
-        }
-        lastElement = to;
-        highlightedCode += `<span class=${simple_type}>${code.substring(from,to)}</span>`
-    });
-    return highlightedCode
-        .split("\n")
-        .map((line, i) => {
-            if (linesToHighlight.find((v) => v - 1 === i)) {
-                return `<span class='editorLineNumber error'>${i + 1}</span>${line}`
-            } else {
-                return `<span class='editorLineNumber'>${i + 1}</span>${line}`
-            }
-        })
-        .join("\n")
 }
 
 async function run() {

@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 
 type GridSize = null | 1 | 2 | 3 | 4 | 5 | 6
-export function Grid(props: {children: ReactNode, item?: boolean, container?: boolean, size?: GridSize, className?: string}) {
+export default function Grid(props: {children: ReactNode, item?: boolean, container?: boolean, size?: GridSize, className?: string}) {
     let classNames=""
     if (props.item) classNames += " grid-item"
     if (props.container) classNames += " grid-container"
