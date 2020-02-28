@@ -8,12 +8,14 @@ import {IToken, ICodeOutput, Wasm} from "./rust_types";
 import {linesWithErrors, code_highlight} from "./common";
 import Tabbed from "./components/tabbed";
 import Examples, {fizzBuzzCode} from "./components/examples";
+import Grammar from "./components/grammar";
 
 function App(props: {wasm:Wasm}) {
   const [code, setCode] = useState(fizzBuzzCode);
   const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as ICodeOutput);
   const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as IToken[]);
   const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const updateCode = (code: string) => {
       setCode(code);
@@ -24,8 +26,24 @@ function App(props: {wasm:Wasm}) {
   };
 
   return (
-    <div>
-        <Grid container className="full-view">
+    <Grid className="root">
+        <Grid container className="menu">
+            <Grid item size={3}>
+                <h1>Editor</h1>
+            </Grid>
+            <Grid item size={3} container>
+                <Grid item size={2}>
+                    <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
+                </Grid>
+                <Grid item size={2}>
+                    <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
+                </Grid>
+                <Grid item size={2}>
+                    <button className={selectedTab == 2 ? "selected" : ""} onClick={()=>setSelectedTab(2)}>About</button>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid container className="content">
             <Grid item size={3} className="scrollable">
                 <Editor
                     value={code}
@@ -40,18 +58,19 @@ function App(props: {wasm:Wasm}) {
                     }}
                 />
             </Grid>
-            <Grid item size={3}>
-                <Tabbed className="full-view" tabNames={["Output", "Grammar", "Examples"]}>
+            <Grid item size={3} className="max-height">
+                <Tabbed className="max-height" selected={selectedTab}>
                     <Console
                         code={code}
                         output={codeOutput}
                     />
-                    <h2>Grammar</h2>
-                    <Examples setCode={updateCode}/>
+                    <Grammar/>
+                    <h1>About</h1>
                 </Tabbed>
             </Grid>
         </Grid>
-    </div>
+        <Examples className="bottom-bar" setCode={updateCode}/>
+    </Grid>
   );
 }
 

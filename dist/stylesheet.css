@@ -1,6 +1,12 @@
 body {
     padding: 0;
     margin: 0;
+    background-color: #e6eed6;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
 }
 
 .keyword {
@@ -28,19 +34,49 @@ body {
 }
 
 .console {
-    background-color: black;
+    background-color: #090c02;
     color: white;
+    min-height: 100%;
     padding: 0 10px 0 10px;
-    overflow: scroll;
-    height: 100%;
 }
 
-.tab-bar {
-    max-height: 10%;
+h1 {
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+}
+
+button {
+    height: 100%;
+    border: none;
+    background-color: #dde2c6;
+    width: 75%;
+}
+
+button:hover {
+    background-color: #a72608;
+}
+
+.selected {
+    border-bottom: inset #a72608 8px;
+}
+
+.menu, .bottom-bar {
+    background-color: #bbc5aa;
+}
+
+.grammar {
+    padding: 10px;
+}
+
+.examples {
+    height: 10%;
 }
 
 .tab {
-    height: 90%;
+    height: 100%;
+    overflow: scroll;
+    height: 100%;
 }
 
 .code-output {
@@ -49,7 +85,7 @@ body {
 
 .scrollable {
     overflow: scroll;
-    max-height: 100vh;
+    height: 100%;
 }
 
 .grid-container {
@@ -58,9 +94,20 @@ body {
     width: 100%;
 }
 
-.full-view {
+.root {
     height: 100vh;
-    max-height: 100vh;
+}
+
+.max-height {
+    height: 100%;
+}
+
+.menu {
+    height: 10%;
+}
+
+.content {
+    height: 80%;
 }
 
 .grid-item {
@@ -97,7 +144,7 @@ pre {
 
 .editor {
     counter-reset: line;
-    border: 1px solid #ced4da;
+    border: 1px solid #e6eed6;
 }
 
 .editor #codeArea {

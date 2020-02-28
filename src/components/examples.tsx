@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from "./grid";
 
 export default function Examples(props: {className?: string, setCode: (arg1: string) => void}) {
     let classNames="examples";
@@ -6,12 +7,20 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
         classNames += ` ${props.className}`
     }
     return (
-        <div className={classNames}>
-            <h2>Code examples</h2>
-            <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
-            <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
-            <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
-        </div>
+        <Grid className={classNames} container>
+            <Grid item size={1}>
+                <h4>Examples</h4>
+            </Grid>
+            <Grid item size={1}>
+                <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
+            </Grid>
+            <Grid item size={1}>
+                <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
+            </Grid>
+            <Grid item size={1}>
+                <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
+            </Grid>
+        </Grid>
     )
 }
 
