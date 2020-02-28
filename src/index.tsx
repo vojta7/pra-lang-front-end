@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {useState} from 'react';
 import Editor from 'react-simple-code-editor';
+import {Console} from './components/console'
+import {Grid} from './components/grid'
 
 const example_code = `// print fizz buzz for given number
 fn print_fizzbuzz(n: i32) {
@@ -37,94 +39,81 @@ fn main() {
 
 type Wasm = typeof import("../pra_lang_interface/pkg/pra_lang_interface")
 
+function linesWithErrors(code: string, output: CodeOutput): number[] {
+    if (output.parsing_error) {
+        let [line, ] = linePosition(code,output.parsing_error.from);
+        return [line]
+    } else if (output.runtime_error) {
+        let [line, ] = linePosition(code,output.runtime_error.position);
+        return [line]
+    } else {
+        return []
+    }
+}
+
 function App(props: {wasm:Wasm}) {
   const [code, setCode] = useState(example_code);
+  const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as CodeOutput);
+  const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as Token[]);
+  const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);
+
+  const updateCode = (code: string) => {
+      setCode(code);
+      const output = props.wasm.run(code) as CodeOutput;
+      setCodeOutput(output);
+      setCodeTokens(props.wasm.simple_lex_code(code) as Token[]);
+      setLinesToHighlight(linesWithErrors(code, output))
+  };
 
   return (
     <div>
-        <Editor
-          value={code}
-          className="editor"
-          textareaId="codeArea"
-          onValueChange={code => setCode(code)}
-          highlight={code => SRSCode(code, props.wasm.simple_lex_code)}
-          padding={10}
-          style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 12,
-          }}
-        />
-        <CodeOutput
-            code={code}
-            run={props.wasm.run}
-        />
-        <ParseOutput
-            code={code}
-            parse={props.wasm.parse_code}
-        />
+        <Grid container className="full-view">
+            <Grid item size={3}>
+                <Editor
+                    value={code}
+                    className="editor"
+                    textareaId="codeArea"
+                    onValueChange={updateCode}
+                    highlight={code => SRSCode(code, codeTokens, linesToHighlight)}
+                    padding={10}
+                    style={{
+                        fontFamily: '"Fira code", "Fira Mono", monospace',
+                        fontSize: 12,
+                    }}
+                />
+            </Grid>
+            <Grid item size={3}>
+                <Console
+                    code={code}
+                    output={codeOutput}
+                />
+            </Grid>
+        </Grid>
     </div>
   );
 }
 
-interface RuntimeError {
+export interface RuntimeError {
     description: string,
     position: number
 }
-interface CodeOutput {
+export interface CodeOutput {
     parsing_error?: ParsingError,
     runtime_error?: RuntimeError,
     return_value?: string,
     stdout?: string
 }
 
-function CodeOutput(props: {code: string, run: (arg1: string) => any}) {
-    const output = props.run(props.code) as CodeOutput;
-    console.log(output);
-    if (output.stdout !== null) {
-        return (<pre className="console">{output.stdout}</pre>)
-    } else if (output.parsing_error != null) {
-        return (<ParsingError code={props.code} error={output.parsing_error}/>)
-    } else if (output.runtime_error != null) {
-        return (<RuntimeError code={props.code} error={output.runtime_error}/>)
-    } else {
-        return (<pre className="console"></pre>)
-    }
-}
-
-interface ParsingError {
+export interface ParsingError {
     from: number,
     to: number,
     description: string
 }
-interface ParseOutput {
-    parsing_error?: ParsingError,
-    ast?: {}
-}
 
-function linePosition(input: string, pos: number): [number,number] {
+export function linePosition(input: string, pos: number): [number,number] {
     let slice = input.substr(0,pos);
     let lines = slice.split("\n");
     return [lines.length,lines[lines.length -1].length]
-}
-
-function ParsingError(props: {code: string,error: ParsingError}) {
-    let [line, position] = linePosition(props.code, props.error.from);
-    return (<div className="errors">Error line {line} pos {position}:<br/>>{props.error.description}</div>)
-}
-
-function RuntimeError(props: {code: string,error: RuntimeError}) {
-    let [line, position] = linePosition(props.code, props.error.position);
-    return (<div className="errors">Error line {line} pos {position}:<br/>>{props.error.description}</div>)
-}
-
-function ParseOutput(props: {code: string, parse: (arg1: string) => any}) {
-    const output = props.parse(props.code) as ParseOutput;
-    console.log(output?.ast);
-    if (output.parsing_error != null) {
-        return (<ParsingError code={props.code} error={output.parsing_error}/>)
-    } else {
-        return (<div className="errors"></div>)
-    }
 }
 
 interface Token {
@@ -133,8 +122,7 @@ interface Token {
     simple_type: string
 }
 
-function SRSCode(code: string, lex: (arg1: string) => any): string {
-    const tokens=lex(code) as Token[];
+function SRSCode(code: string, tokens: Token[], linesToHighlight: number[]): string {
     let lastElement = 0;
     let highlightedCode = "";
     tokens.map(({from, to, simple_type})=>{
@@ -146,7 +134,13 @@ function SRSCode(code: string, lex: (arg1: string) => any): string {
     });
     return highlightedCode
         .split("\n")
-        .map((line, i) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
+        .map((line, i) => {
+            if (linesToHighlight.find((v) => v - 1 === i)) {
+                return `<span class='editorLineNumber error'>${i + 1}</span>${line}`
+            } else {
+                return `<span class='editorLineNumber'>${i + 1}</span>${line}`
+            }
+        })
         .join("\n")
 }
 
