@@ -52,18 +52,20 @@ function App(props: {wasm:Wasm}) {
         </Grid>
         <Grid container className="content">
             <Resizable>
-                <Editor
-                    value={code}
-                    className="editor scrollable"
-                    textareaId="codeArea"
-                    onValueChange={updateCode}
-                    highlight={code => code_highlight(code, codeTokens, linesToHighlight)}
-                    padding={10}
-                    style={{
-                        fontFamily: '"Fira code", "Fira Mono", monospace',
-                        fontSize: 12,
-                    }}
-                />
+                <div className="scrollable">
+                    <Editor
+                        value={code}
+                        className="editor"
+                        textareaId="codeArea"
+                        onValueChange={updateCode}
+                        highlight={code => code_highlight(code, codeTokens, linesToHighlight)}
+                        padding={10}
+                        style={{
+                            fontFamily: '"Fira code", "Fira Mono", monospace',
+                            fontSize: 12,
+                        }}
+                    />
+                </div>
                 <Tabbed className="max-height right-panel" selected={selectedTab}>
                     <Console
                         code={code}

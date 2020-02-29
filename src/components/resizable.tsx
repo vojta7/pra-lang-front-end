@@ -1,6 +1,10 @@
 import React, {ReactElement, useState} from "react";
 
-export default function Resizable(props: {children: [ReactElement, ReactElement]}) {
+export default function Resizable(props: {children: [ReactElement, ReactElement], className?: string}) {
+    let classNames="resizable";
+    if (props.className) {
+        classNames += ` ${props.className}`
+    }
     const [position,setPosition] = useState<number|null>(null);
     const panelWidth = 14;
     const leftPanelStyle = {
@@ -34,7 +38,7 @@ export default function Resizable(props: {children: [ReactElement, ReactElement]
     };
 
     return (
-        <div className="resizable">
+        <div className={classNames}>
             <div style={leftPanelStyle}>
                 {props.children[0]}
             </div>
