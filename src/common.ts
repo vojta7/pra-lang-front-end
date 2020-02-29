@@ -21,12 +21,15 @@ export function linesWithErrors(code: string, output: ICodeOutput): number[] {
 export function code_highlight(code: string, tokens: IToken[], linesToHighlight: number[]): string {
     let lastElement = 0;
     let highlightedCode = "";
+    const escape = (code: string) => code
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     tokens.map(({from, to, simple_type})=>{
         if (from > lastElement) {
-            highlightedCode += `<span>${code.substring(lastElement,from)}</span>`;
+            highlightedCode += `<span>${escape(code.substring(lastElement,from))}</span>`;
         }
         lastElement = to;
-        highlightedCode += `<span class=${simple_type}>${code.substring(from,to)}</span>`
+        highlightedCode += `<span class=${simple_type}>${escape(code.substring(from,to))}</span>`
     });
     return highlightedCode
         .split("\n")
