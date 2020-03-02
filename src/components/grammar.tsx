@@ -7,51 +7,83 @@ export default function Grammar(props: {className?: string}) {
     }
     return (
         <div className="grammar">
-            <h2>NonTerminals</h2>
+            <dl>
+                <dt>Name+</dt>
+                <dd>One or more repetitions of name</dd>
+                <dt>Name*</dt>
+                <dd>Zero or more repetitions of name</dd>
+                <dt>Name?</dt>
+                <dd>One or Zero repetition of name</dd>
+                <dt>'string'</dt>
+                <dd>String literal</dd>
+            </dl>
+            <h3>NonTerminals</h3>
             <pre className={classNames}>{nonTerminals}</pre>
-            <h2>Terminals</h2>
+            <h3>Terminals</h3>
             <pre className={classNames}>{terminals}</pre>
         </div>
 )
 }
 
 const nonTerminals = `\
-Program             -> Function+
-Function            -> 'fn' Identifier '(' ArgumentList ')' Block
-ArgumentList        -> ( VariableDeclaration ',' )*  VariableDeclaration?
-VariableDeclaration -> Identifier ':' DataType
-DataType -> TI32 | TString | TBoolean | TUnit
-Block -> '{' Statement* Expression '}'
-Statement -> Expression ';'
+Program
+    -> Function+
+Function
+    -> 'fn' Identifier '(' ArgumentList ')' Block
+ArgumentList
+    -> ( VariableDeclaration ',' )*  VariableDeclaration?
+VariableDeclaration
+    -> Identifier ':' DataType
+DataType
+    -> TI32
+    | TString
+    | TBoolean
+    | TUnit
+Block
+    -> '{' Statement* Expression '}'
+Statement
+    -> Expression ';'
     | Identifier '=' Expression;
-Expression -> Identifier '(' ExpressionList ')'
+Expression
+    -> Identifier '(' ExpressionList ')'
     | Expression OrOp And
-    | 'if' Expression Block
+    | If
+If
+    -> 'if' Expression Block
     | 'if' Expression Block 'else' Block
-    | And
-And -> And AndOp Comparison
+    | 'if' Expression Block 'else' If
+And
+    -> And AndOp Comparison
     | Comparison
-Comparision -> Comparison ComparisonOp Addition
+Comparision
+    -> Comparison ComparisonOp Addition
     | Addition
-Addition -> Addition AdditionOp Factor
+Addition
+    -> Addition AdditionOp Factor
     | Factor
-Factor -> Factor FactorOp Term
+Factor ->
+    Factor FactorOp Term
     | Term
-Term -> Number | Boolean | String | Identifier | "(" Expression ")"
+Term
+    -> Number
+    | Boolean
+    | String
+    | Identifier
+    | '(' Expression ')'
 `;
 
 const terminals = `\
-    AdditionOp -> '+' | '-'
-    FactorOp -> '*' | '/' | '%'
-    ComparisonOp -> '<' | '<=' | '==' | '>' | '>=' | '!='
-    AndOp -> '&&'
-    OrOp -> '||'
-    I32 -> [0-9]+
-    String -> '"' r"[^\"]" '"'
-    Boolean -> 'true' | 'false'
-    Identifier -> r"[a-zA-Z][a-zA-Z_]*"
-    TI32 -> 'i32'
-    TString -> 'String'
-    TBoolean -> 'bool'
-    TUnit -> '()'
+AdditionOp  -> '+' | '-'
+FactorOp    -> '*' | '/' | '%'
+ComparisonOp-> '<' | '<=' | '==' | '>' | '>=' | '!='
+AndOp       -> '&&'
+OrOp        -> '||'
+I32         -> [0-9]+
+String      -> '"' r"[^\"]" '"'
+Boolean     -> 'true' | 'false'
+Identifier  -> r"[a-zA-Z][a-zA-Z_]*"
+TI32        -> 'i32'
+TString     -> 'String'
+TBoolean    -> 'bool'
+TUnit       -> '()'
 `;
