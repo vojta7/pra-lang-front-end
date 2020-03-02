@@ -55,7 +55,7 @@ function App(props: {wasm:Wasm}) {
                         padding={10}
                         style={{
                             fontFamily: '"Fira code", "Fira Mono", monospace',
-                            fontSize: 12,
+                            fontSize: '0.9em',
                         }}
                     />
                 </div>
