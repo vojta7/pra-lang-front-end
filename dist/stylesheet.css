@@ -14,13 +14,6 @@ h1 {
     text-align: center;
 }
 
-button {
-    height: 100%;
-    border: none;
-    background-color: #dde2c6;
-    width: 75%;
-}
-
 button:hover {
     background-color: #a72608;
 }
@@ -59,15 +52,46 @@ Syntax highlighting
     padding: 0 10px 0 10px;
 }
 
-
-
 .selected {
     border-bottom: inset #a72608 8px;
 }
 
-.menu, .bottom-bar {
+.top-bar, .bottom-bar {
     background-color: #bbc5aa;
     height: 10%;
+    box-sizing: border-box;
+    max-height: 5em;
+}
+
+.bottom-bar {
+    border-top: solid black 1px
+}
+
+.top-bar {
+    border-bottom: solid black 1px
+}
+
+.bottom-menu {
+    height: 100%;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.menu {
+    width: 50%;
+}
+
+.menu, .bottom-menu {
+    display: flex;
+    justify-content: space-between;
+}
+
+.menu button, .bottom-menu button {
+    height: 100%;
+    border: none;
+    background-color: #dde2c6;
+    width: 10em;
+    min-height: 1em;
 }
 
 .grammar {

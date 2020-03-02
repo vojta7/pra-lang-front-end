@@ -7,20 +7,15 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
         classNames += ` ${props.className}`
     }
     return (
-        <Grid className={classNames} container>
-            <Grid item size={2} className="centered">
-                <h4>Examples</h4>
-            </Grid>
-            <Grid item size={1}>
+        <div className={classNames}>
+            <div className="bottom-menu">
                 <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
-            </Grid>
-            <Grid item size={1}>
                 <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
-            </Grid>
-            <Grid item size={1}>
                 <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
-            </Grid>
-        </Grid>
+                <button onClick={()=>props.setCode(factorialCode)}>Factorial2</button>
+                <button onClick={()=>props.setCode(factorialCode)}>Factorial3</button>
+            </div>
+        </div>
     )
 }
 

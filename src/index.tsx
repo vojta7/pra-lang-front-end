@@ -34,21 +34,15 @@ function App(props: {wasm:Wasm}) {
 
   return (
     <Grid className="root">
-        <Grid container className="menu">
+        <Grid container className="top-bar">
             <Grid item size={3} className="centered">
                 <h1>Editor</h1>
             </Grid>
-            <Grid item size={3} container>
-                <Grid item size={2}>
-                    <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
-                </Grid>
-                <Grid item size={2}>
-                    <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
-                </Grid>
-                <Grid item size={2}>
-                    <button className={selectedTab == 2 ? "selected" : ""} onClick={()=>setSelectedTab(2)}>About</button>
-                </Grid>
-            </Grid>
+            <div className="menu">
+                <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
+                <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
+                <button className={selectedTab == 2 ? "selected" : ""} onClick={()=>setSelectedTab(2)}>About</button>
+            </div>
         </Grid>
         <Grid container className="content">
             <Resizable>
