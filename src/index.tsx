@@ -33,16 +33,16 @@ function App(props: {wasm:Wasm}) {
 
   return (
     <div className="root">
-        <div className="top-bar">
+        <header className="top-bar">
             <div className="header">
                 <h1>Editor</h1>
             </div>
-            <div className="menu">
+            <nav className="menu">
                 <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
                 <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
                 <button className={selectedTab == 2 ? "selected" : ""} onClick={()=>setSelectedTab(2)}>About</button>
-            </div>
-        </div>
+            </nav>
+        </header>
         <div className="content">
             <Resizable>
                 <div className="scrollable">
