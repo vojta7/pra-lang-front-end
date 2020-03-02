@@ -11,7 +11,7 @@ h1,h2,h3,h4,pre {
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 1.7em;
     text-align: center;
 }
 
@@ -61,6 +61,8 @@ Syntax highlighting
 
 .console pre {
     font-family: inherit;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .top-bar, .bottom-bar {
@@ -115,7 +117,7 @@ button:hover {
 
 .tab {
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
     height: 100%;
 }
 
@@ -124,7 +126,7 @@ button:hover {
 }
 
 .scrollable {
-    overflow: scroll;
+    overflow-y: scroll;
     height: 100%;
 }
 
@@ -155,7 +157,7 @@ button:hover {
 
 .content {
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
     min-height: 10em;
 }
 
