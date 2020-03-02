@@ -1,5 +1,4 @@
 import React from 'react';
-import Grid from "./grid";
 
 export default function Examples(props: {className?: string, setCode: (arg1: string) => void}) {
     let classNames="examples";

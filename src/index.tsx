@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import Editor from 'react-simple-code-editor';
 import Console from './components/console/Console'
-import Grid from './components/grid'
 import {IToken, ICodeOutput, Wasm} from "./rust_types";
 import {linesWithErrors, code_highlight} from "./common";
 import Tabbed from "./components/tabbed";
@@ -33,18 +32,18 @@ function App(props: {wasm:Wasm}) {
   };
 
   return (
-    <Grid className="root">
-        <Grid container className="top-bar">
-            <Grid item size={3} className="centered">
+    <div className="root">
+        <div className="top-bar">
+            <div className="header">
                 <h1>Editor</h1>
-            </Grid>
+            </div>
             <div className="menu">
                 <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
                 <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
                 <button className={selectedTab == 2 ? "selected" : ""} onClick={()=>setSelectedTab(2)}>About</button>
             </div>
-        </Grid>
-        <Grid container className="content">
+        </div>
+        <div className="content">
             <Resizable>
                 <div className="scrollable">
                     <Editor
@@ -69,13 +68,20 @@ function App(props: {wasm:Wasm}) {
                     <h1>About</h1>
                 </Tabbed>
             </Resizable>
-        </Grid>
+        </div>
         <Examples className="bottom-bar" setCode={updateCode}/>
-    </Grid>
+    </div>
   );
 }
 
+function updateHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
 async function run() {
+    updateHeight();
+    window.document.body.onresize = updateHeight;
     let wasm = await import("../pra_lang_interface/pkg/pra_lang_interface");
     console.log(wasm.run("fn main() { 2*3 -1 }"));
     console.log(wasm.parse_code("fn main() { 2*3 -1 }"));
