@@ -394,6 +394,7 @@ dependencies = [
 [[package]]
 name = "pra-lang"
 version = "0.1.0"
+source = "git+https://github.com/vojta7/pra-lang.git#502744318c0080798095d054443f98ea7a9f5adc"
 dependencies = [
  "lalrpop",
  "lalrpop-util",

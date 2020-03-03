@@ -10,7 +10,7 @@ crate-type = ["cdylib", "rlib"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-pra-lang = { path="../../pra-lang"}
+pra-lang = { git = "https://github.com/vojta7/pra-lang.git"}
 wasm-bindgen = {version = "0.2", features = ["serde-serialize"]}
 js-sys = "*"
 serde = { version = "1.0", features = ["derive"] }
