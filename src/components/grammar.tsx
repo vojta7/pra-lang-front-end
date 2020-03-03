@@ -8,7 +8,8 @@ export default function Grammar(props: { className?: string }) {
     return (
         <div className="grammar">
             <h2>Language specification</h2>
-            <dl>
+            <h3>Description</h3>
+            <dl className="mono">
                 <dt>Name+</dt>
                 <dd>One or more repetitions of name</dd>
                 <dt>Name*</dt>

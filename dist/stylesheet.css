@@ -18,6 +18,22 @@ h1,h2 {
     text-align: center;
 }
 
+dt {
+    float: left;
+    clear: left;
+}
+dt::after {
+    content: ":";
+}
+dd {
+    margin: 0 0 0 8em;
+    padding: 0 0 0.5em 0;
+}
+
+.mono {
+    font-family: monospace;
+}
+
 .grammar, .about {
     padding: 0 1em;
 }
