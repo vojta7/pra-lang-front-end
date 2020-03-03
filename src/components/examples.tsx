@@ -8,11 +8,10 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
     return (
         <footer className={classNames}>
             <div className="bottom-menu">
-                <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
                 <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
+                <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
                 <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
-                <button onClick={()=>props.setCode(factorialCode)}>Factorial2</button>
-                <button onClick={()=>props.setCode(factorialCode)}>Factorial3</button>
+                <button onClick={()=>props.setCode(pascalTriangle)}>Pascal triangle</button>
             </div>
         </footer>
     )
@@ -23,13 +22,13 @@ fn print_fizzbuzz(n: i32) {
     mod3 = n % 3 == 0;
     mod5 = n % 5 == 0;
     if mod3 && mod5 {
-        print("Fizz Buzz")
+        print("Fizz Buzz\\n")
     } else if mod3 {
-        print("Fizz")
+        print("Fizz\\n")
     } else if mod5 {
-        print("Buzz")
+        print("Buzz\\n")
     } else {
-        print(n)
+        print(n,"\\n")
     }
 }
 
@@ -46,7 +45,7 @@ fn main() {
 }
 `;
 
-export const fibonacciCode = `// print fibonacci numbers
+export const fibonacciCode = `// return fibonacci number n
 fn fib(n: i32) {
     res = 1;
     s = 0;
@@ -58,27 +57,26 @@ fn fib(n: i32) {
     res + s
 }
 
+// print fibonacci numbers from 1 to n
 fn print_fibs_up_to_n(n: i32) {
     if n > 1 {
         print_fibs_up_to_n( n - 1 );
         0
     };
-    print( n, ": ", fib( n ) )
+    print( n, ": ", fib( n ), "\\n" )
 }
 
 fn main() {
-    print_fibs_up_to_n( 15 );
-    0
+    print_fibs_up_to_n( 15 )
 }
 `;
 
-export const factorialCode = `// print factorial
+export const factorialCode = `// return factorial
 fn fact(n: i32) {
     if n < 2 {
         1
     } else {
-        next = fact(n-1);
-        n * next
+        n * fact(n-1)
     }
 }
 
@@ -86,5 +84,55 @@ fn main() {
     print(
         fact(5)
     )
+}
+`;
+
+export const pascalTriangle = `//return factorial
+fn fact(n: i32) {
+    if n < 2 {
+        1
+    } else {
+        n * fact(n-1)
+    }
+}
+
+// return binomial coefficient
+fn n_over_k(n: i32, k: i32) {
+   fact(n) / (fact(k) * fact(n-k))
+}
+
+// print pascal number
+fn print_pascal_number(row: i32, column: i32) {
+  print(n_over_k(row,column));
+  if column < row {
+    print(" ")
+  } else {
+    print("\\n")
+  }
+}
+
+// helper function
+fn print_pascal_row_inner(row: i32, column: i32) {
+  if column <= row {
+    print_pascal_number(row, column);
+    print_pascal_row_inner(row, column + 1)
+  }
+}
+
+// print one row of pascal triangle
+fn print_pascal_row(row: i32) {
+  print_pascal_row_inner(row, 0)
+}
+
+// print pascal triangle
+fn print_pascal_triangle(from: i32, to: i32) {
+  if from < to {
+    print_pascal_row(from);
+    print_pascal_triangle(from +1, to)
+  }
+}
+
+fn main() {
+  print_pascal_triangle(0, 8)
 }
 `;

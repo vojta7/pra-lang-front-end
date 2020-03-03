@@ -6,12 +6,12 @@ import Console from './components/console/Console'
 import {IToken, ICodeOutput, Wasm} from "./rust_types";
 import {linesWithErrors, code_highlight} from "./common";
 import Tabbed from "./components/tabbed";
-import Examples, {fizzBuzzCode} from "./components/examples";
+import Examples, {fibonacciCode, fizzBuzzCode} from "./components/examples";
 import Grammar from "./components/grammar";
 import Resizable from "./components/resizable";
 
 function App(props: {wasm:Wasm}) {
-  const [code, setCode] = useState(fizzBuzzCode);
+  const [code, setCode] = useState(fibonacciCode);
   const [codeOutput, setCodeOutput] = useState(props.wasm.run(code) as ICodeOutput);
   const [codeTokens, setCodeTokens] = useState(props.wasm.simple_lex_code(code) as IToken[]);
   const [linesToHighlight, setLinesToHighlight] = useState<number[]>([]);

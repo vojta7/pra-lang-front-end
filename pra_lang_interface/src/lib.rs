@@ -33,12 +33,13 @@ fn builtins(output: &mut String) -> Buildins {
                 match arg {
                     VarVal::I32(Some(v)) => output.push_str(&format!("{}", v)),
                     VarVal::BOOL(Some(v)) => output.push_str(&format!("{}", v)),
-                    VarVal::STRING(Some(v)) => output.push_str(&format!("{}", v)),
+                    VarVal::STRING(Some(v)) => {
+                        output.push_str(&format!("{}", v.replace("\\n", "\n")))
+                    }
                     VarVal::UNIT => output.push_str("()"),
                     _ => (),
                 }
             }
-            output.push_str("\n");
             VarVal::UNIT
         }),
     );
