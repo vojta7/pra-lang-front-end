@@ -1,12 +1,13 @@
 import React, {ReactNode, useState} from 'react';
 
-export default function Grammar(props: {className?: string}) {
-    let classNames="";
+export default function Grammar(props: { className?: string }) {
+    let classNames = "";
     if (props.className) {
         classNames += ` ${props.className}`
     }
     return (
         <div className="grammar">
+            <h2>Language specification</h2>
             <dl>
                 <dt>Name+</dt>
                 <dd>One or more repetitions of name</dd>
@@ -21,8 +22,45 @@ export default function Grammar(props: {className?: string}) {
             <pre className={classNames}>{nonTerminals}</pre>
             <h3>Terminals</h3>
             <pre className={classNames}>{terminals}</pre>
+            <h3>Operator precedence</h3>
+            <p>The of operators is ordered as follows, going from strong to weak.</p>
+            <table className="operator-precedence">
+                <thead>
+                <tr>
+                    <th> Operator</th>
+                    <th> Associativity</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>*</code> <code>/</code> <code>%</code></td>
+                    <td> left to right</td>
+                </tr>
+                <tr>
+                    <td><code>+</code> <code>-</code></td>
+                    <td> left to right</td>
+                </tr>
+                <tr>
+                    <td><code>==</code> <code>!=</code> <code>&lt;</code> <code>&gt;</code> <code>&lt;=</code>
+                        <code>&gt;=</code></td>
+                    <td> Require parentheses</td>
+                </tr>
+                <tr>
+                    <td><code>&amp;&amp;</code></td>
+                    <td> left to right</td>
+                </tr>
+                <tr>
+                    <td><code>||</code></td>
+                    <td> left to right</td>
+                </tr>
+                <tr>
+                    <td><code>=</code></td>
+                    <td> right to left</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-)
+    )
 }
 
 const nonTerminals = `\

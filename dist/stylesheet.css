@@ -5,14 +5,44 @@ body {
     font-family: 'Roboto';
 }
 
-h1,h2,h3,h4,pre {
+pre {
     margin: 0;
     padding: 0;
 }
 
 h1 {
     font-size: 1.7em;
+}
+
+h1,h2 {
     text-align: center;
+}
+
+.grammar, .about {
+    padding: 0 1em;
+}
+
+.operator-precedence {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.operator-precedence thead {
+    background-color: #bbc5aa;
+}
+
+.operator-precedence tr {
+    border: 1px solid black;
+}
+
+.operator-precedence td {
+    border: 1px solid black;
+    padding: 3px 20px;
+}
+
+.operator-precedence code {
+    background: #f1f1f1;
+    padding: 0.1em 0.3em;
 }
 
 .header {
@@ -54,7 +84,7 @@ Syntax highlighting
     background-color: #090c02;
     color: white;
     min-height: 100%;
-    padding: 0 10px 0 10px;
+    padding: 0 1em;
     font-family: "Fira code", "Fira Mono", monospace;
     font-size: 0.9em;
 }
@@ -109,10 +139,6 @@ button:hover {
 
 .menu .selected, .bottom-menu .selected {
     border-bottom: inset #a72608 6px;
-}
-
-.grammar {
-    padding: 10px;
 }
 
 .tab {
