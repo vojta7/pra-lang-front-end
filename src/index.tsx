@@ -65,7 +65,12 @@ function App(props: {wasm:Wasm}) {
                         output={codeOutput}
                     />
                     <Grammar/>
-                    <h1>About</h1>
+                    <div className="about">
+                        <h2>About</h2>
+                        <p>Simple toy language, with source code and more detailed description available at github.</p>
+                        <p>Lexer, parser and interpreter is written in rust and compiled to webassembly, but it can also be used from command line. Syntax highlighting is implemented in typescript and uses tokens provided by lexer.</p>
+                        <a href="#"><img src="./GitHub-Mark-64px.png" /></a>
+                    </div>
                 </Tabbed>
             </Resizable>
         </div>
