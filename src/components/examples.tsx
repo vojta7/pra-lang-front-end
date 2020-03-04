@@ -17,7 +17,8 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
     )
 }
 
-export const fizzBuzzCode = `// print fizz buzz for given number
+export const fizzBuzzCode = `// https://en.wikipedia.org/wiki/Fizz_buzz
+// print fizz buzz for given number
 fn print_fizzbuzz(n: i32) {
     mod3 = n % 3 == 0;
     mod5 = n % 5 == 0;
@@ -45,7 +46,8 @@ fn main() {
 }
 `;
 
-export const fibonacciCode = `// return fibonacci number n
+export const fibonacciCode = `// https://en.wikipedia.org/wiki/Fibonacci_number
+// return fibonacci number n
 fn fib(n: i32) {
     res = 1;
     s = 0;
@@ -87,7 +89,8 @@ fn main() {
 }
 `;
 
-export const pascalTriangle = `//return factorial
+export const pascalTriangle = `// https://en.wikipedia.org/wiki/Pascal%27s_triangle
+// return factorial
 fn fact(n: i32) {
     if n < 2 {
         1
