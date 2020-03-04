@@ -1,6 +1,6 @@
 # Web demo of a toy language
 
-Simple web editor with examples for my toy [language](https://github.com/vojta7/pra-lang)
+Simple web editor with examples for my toy [language](https://github.com/vojta7/pra-lang), you can [try it online](https://admiring-lichterman-e55e0b.netlify.com/).
 
 ## Building
 
