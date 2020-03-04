@@ -34,9 +34,7 @@ function App(props: {wasm:Wasm}) {
   return (
     <div className="root">
         <header className="top-bar">
-            <div className="header">
-                <h1>Editor</h1>
-            </div>
+            <Examples setCode={updateCode}/>
             <nav className="menu">
                 <button className={selectedTab == 0 ? "selected" : ""} onClick={()=>setSelectedTab(0)}>Console</button>
                 <button className={selectedTab == 1 ? "selected" : ""} onClick={()=>setSelectedTab(1)}>Grammar</button>
@@ -45,7 +43,7 @@ function App(props: {wasm:Wasm}) {
         </header>
         <div className="content">
             <Resizable>
-                <div className="scrollable">
+                <div className="scrollable editor">
                     <Editor
                         value={code}
                         className="editor"
@@ -56,6 +54,7 @@ function App(props: {wasm:Wasm}) {
                         style={{
                             fontFamily: '"Fira code", "Fira Mono", monospace',
                             fontSize: '0.9em',
+                            marginBottom: '2em'
                         }}
                     />
                 </div>
@@ -74,7 +73,6 @@ function App(props: {wasm:Wasm}) {
                 </Tabbed>
             </Resizable>
         </div>
-        <Examples className="bottom-bar" setCode={updateCode}/>
     </div>
   );
 }

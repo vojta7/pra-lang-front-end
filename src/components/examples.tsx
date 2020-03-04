@@ -6,14 +6,12 @@ export default function Examples(props: {className?: string, setCode: (arg1: str
         classNames += ` ${props.className}`
     }
     return (
-        <footer className={classNames}>
-            <div className="bottom-menu">
-                <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
-                <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
-                <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
-                <button onClick={()=>props.setCode(pascalTriangle)}>Pascal triangle</button>
-            </div>
-        </footer>
+        <div className={classNames}>
+            <button onClick={()=>props.setCode(fibonacciCode)}>Fibonacci</button>
+            <button onClick={()=>props.setCode(fizzBuzzCode)}>FizzBuzz</button>
+            <button onClick={()=>props.setCode(factorialCode)}>Factorial</button>
+            <button onClick={()=>props.setCode(pascalTriangle)}>Pascal triangle</button>
+        </div>
     )
 }
 

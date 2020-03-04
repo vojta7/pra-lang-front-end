@@ -107,7 +107,7 @@ Syntax highlighting
 }
 
 .console {
-    background-color: #090c02;
+    background: #1c1c1c;
     color: white;
     min-height: 100%;
     padding: 0 1em;
@@ -121,37 +121,25 @@ Syntax highlighting
     white-space: pre-wrap;
 }
 
-.top-bar, .bottom-bar {
+.top-bar {
     background-color: #bbc5aa;
     box-sizing: border-box;
     height: 3em;
-}
-
-.bottom-bar {
-    border-top: solid black 1px;
-}
-
-.top-bar {
-    border-bottom: solid black 1px;
     display: flex;
-}
-
-.bottom-menu {
-    height: 100%;
     justify-content: space-between;
-    width: 100%;
+    border-bottom: solid black 1px;
 }
 
 .menu {
-    width: 50%;
-}
-
-.menu, .bottom-menu {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
 }
 
-.menu button, .bottom-menu button {
+.menu button {
+    margin-left: 1em;
+}
+
+button {
     height: 100%;
     border: none;
     background-color: #dde2c6;
@@ -163,7 +151,7 @@ button:hover {
     background-color: #a72608;
 }
 
-.menu .selected, .bottom-menu .selected {
+.menu .selected {
     border-bottom: inset #a72608 6px;
 }
 
@@ -173,6 +161,15 @@ button:hover {
     height: 100%;
 }
 
+.examples {
+    display: flex;
+    justify-content: start;
+}
+
+.examples button {
+    margin-right: 1em;
+}
+
 .code-output {
     padding: 10px;
 }
@@ -180,13 +177,6 @@ button:hover {
 .scrollable {
     overflow-y: scroll;
     height: 100%;
-}
-
-.grid-container {
-    display: flex;
-    width: 100%;
-    align-content: center;
-    justify-content: center;
 }
 
 .resizable {
@@ -213,43 +203,13 @@ button:hover {
     min-height: 10em;
 }
 
-.grid-item {
-    width: 100%;
-}
-
-.grid-size1 {
-    width: 16%;
-}
-
-.grid-size2 {
-    width: 33%;
-}
-
-.grid-size3 {
-    width: 50%;
-}
-
-.grid-size4 {
-    width: 66%;
-}
-
-.grid-size4 {
-    width: 83%;
-}
-
-.grid-size4 {
-    width: 100%;
-}
-
 /*
 Editor
  */
 .editor {
     counter-reset: line;
-    border: 1px solid #e6eed6;
     background: #1c1c1c;
     color: #aaa;
-    height: 100%;
 }
 
 .editor #codeArea {
